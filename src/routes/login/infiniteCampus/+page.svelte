@@ -1,5 +1,5 @@
 <script>
-    const InfiniteCampus = require('infinite-campus')
+    //import InfiniteCampus from 'infinite-campus'
 
 	import { goto } from '$app/navigation'
 	import { parseData } from '$lib/js/parseData.js'
@@ -70,8 +70,7 @@
 <div class="content">
 	<form on:submit|preventDefault={login}>
 		<h2>Login</h2>
-        <select>
-        </select>
+        <Select items={states} />
 		<input type="text" placeholder="District URL" bind:value={districtUrl} />
 		<input type="text" placeholder="Username" bind:value={username} />
 		<input type="password" placeholder="Password" bind:value={password} />
