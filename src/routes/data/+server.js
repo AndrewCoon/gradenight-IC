@@ -1,16 +1,31 @@
 import { login } from 'studentvue.js'
 import * as cookie from 'cookie'
 
+
 export async function GET({ locals }) {
 	console.log('get data')
 
 	let result
 
 	try {
+		let api = Buffer.from(locals.user.api, 'base64').toString('ascii');
+		let param1, state;
+		if(api == "vue")
+			param1 = Buffer.from(locals.user.districtUrl, 'base64').toString('ascii');
+		else{
+			param1 = Buffer.from(locals.user.districtName, 'base64').toString('ascii');
+			state = Buffer.from(locals.user.state, 'base64').toString('ascii');
+		}
+		let user = Buffer.from(locals.user.username, 'base64').toString('ascii');
+		let pass = Buffer.from(locals.user.password, 'base64').toString('ascii');
+
+		let finalParam1 = param1 + "|" + state;
+
+
 		let client = await login(
-			Buffer.from(locals.user.districtUrl, 'base64').toString('ascii'),
-			Buffer.from(locals.user.username, 'base64').toString('ascii'),
-			Buffer.from(locals.user.password, 'base64').toString('ascii')
+			param1,
+			user,
+			pass
 		)
 		// let student = JSON.parse(await client.getStudentInfo()).StudentInfo
 		// let gradebook = JSON.parse(await client.getGradebook()).Gradebook
