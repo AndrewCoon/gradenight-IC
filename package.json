@@ -28,7 +28,8 @@
 	"dependencies": {
 		"chart.js": "^3.7.0",
 		"cookie": "^0.4.1",
-		"studentvue.js": "^0.1.1"
+		"studentvue.js": "^0.1.1",
+		"svelte-select": "^5.8.3"
 	},
 	"engines": {
 		"node": ">=16.0.0"
