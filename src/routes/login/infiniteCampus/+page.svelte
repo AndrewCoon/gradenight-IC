@@ -7,6 +7,7 @@
 	import Spinner from '$lib/components/Spinner.svelte'
     import Select from 'svelte-select';
 
+
 	let districtName
 	let username
 	let password
@@ -36,7 +37,7 @@
 		console.log(state);
 		let finalState = state.value.substring(0,2).toUpperCase();
 
-		const res = await fetch('/login', {
+		const res = await fetch('/login/infiniteCampus', {
 			method: 'POST',
 			body: JSON.stringify({
 				api,

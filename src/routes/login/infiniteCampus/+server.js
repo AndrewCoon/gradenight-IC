@@ -1,59 +1,19 @@
-/** @type {import('./$types').RequestHandler} */
-export async function GET() {
-    return new Response();
-};
+import { login } from 'studentvue.js'
+import cookie from 'cookie'
 
+import {ic_login} from './ic.js'
 
-export async function GET({ locals }) {
-	console.log('get data')
+export async function POST({ request }) {
+	console.log('post login')
 
+	const body = await request.json()
 	let result
 
 	try {
-		let api = Buffer.from(locals.user.api, 'base64').toString('ascii');
-		let user = Buffer.from(locals.user.username, 'base64').toString('ascii');
-		let pass = Buffer.from(locals.user.password, 'base64').toString('ascii');
-
-		let param1, state;
-
-		if(api == "vue")
-			param1 = Buffer.from(locals.user.districtUrl, 'base64').toString('ascii');
-		else{
-			param1 = Buffer.from(locals.user.districtName, 'base64').toString('ascii');
-			state = Buffer.from(locals.user.state, 'base64').toString('ascii');
-		}
-		
-
-		if(api == "vue"){
-			let client = await login(
-				param1,
-				user,
-				pass
-			)
-		}else{
-			let client = await ic_login(
-				param1,
-				state, 
-				user,
-				pass
-			)
-		}
-		// let student = JSON.parse(await client.getStudentInfo()).StudentInfo
-		// let gradebook = JSON.parse(await client.getGradebook()).Gradebook
-		if(api == "vue"){
-
-			result = await Promise.all([
-				client.getStudentInfo().then((value) => JSON.parse(value).StudentInfo),
-				client.getGradebook(0).then((value) => JSON.parse(value).Gradebook),
-				client.getGradebook(1).then((value) => JSON.parse(value).Gradebook),
-				client.getGradebook(2).then((value) => JSON.parse(value).Gradebook),
-				client.getGradebook(3).then((value) => JSON.parse(value).Gradebook)
-			])
-		}else{
-			result = await Promise.all([
-				client.getMessages().then((value) => console.log(JSON.parse(value)))
-			])
-		}
+		let client = await ic_login(body.districtName, body.finalState, body.username, body.password)
+		result = await Promise.all([
+			client.getMessages().then((value) => console.log(JSON.parse(value)))
+		])
 
 		if (!result[0]) {
 			throw new Error('No data returned')
@@ -61,19 +21,9 @@ export async function GET({ locals }) {
 	} catch (error) {
 		console.log(error)
 		return new Response(null, {
-			status: 401,
-			headers: {
-				'Set-cookie': cookie.serialize('auth', '', {
-					httpOnly: true,
-					sameSite: 'strict',
-					path: '/',
-					expires: new Date(0)
-				})
-			}
+			status: 401
 		})
 	}
-
-	console.log('logged in')
 
 	const currentPeriod =
 		result[1].ReportingPeriods.ReportPeriod.length -
@@ -88,12 +38,24 @@ export async function GET({ locals }) {
 		JSON.stringify({
 			student: result.shift(),
 			periods: result,
-			currentPeriod,
-			periodDates: result[1].ReportingPeriods.ReportPeriod
+			currentPeriod
 		}),
 		{
 			headers: {
-				'Content-Type': 'application/json'
+				'Set-Cookie': cookie.serialize(
+					'auth',
+					Buffer.from(body.username).toString('base64') +
+						':' +
+						Buffer.from(body.password).toString('base64') +
+						':' +
+						Buffer.from(body.districtUrl).toString('base64'),
+					{
+						httpOnly: true,
+						maxAge: 60 * 60 * 24 * 30,
+						sameSite: 'strict',
+						path: '/'
+					}
+				)
 			}
 		}
 	)
