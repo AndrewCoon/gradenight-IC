@@ -1,5 +1,4 @@
 <script>
-    const InfiniteCampus = require('infinite-campus')
 
 	import { goto } from '$app/navigation'
 	import { parseData } from '$lib/js/parseData.js'
