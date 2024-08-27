@@ -7,16 +7,19 @@
 	import Spinner from '$lib/components/Spinner.svelte'
     import Select from 'svelte-select';
 
-	let districtUrl
+	let districtName
 	let username
 	let password
 	let error
+	let state
 	let loading = false
+
+	let api = "IC";
 
     let states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
     
 	async function login() {
-		if (!districtUrl) {
+		if (!districtName) {
 			error = 'Please enter a district URL.'
 			return
 		}
@@ -29,12 +32,18 @@
 			return
 		}
 		loading = true
+
+		console.log(state);
+		let finalState = state.value.substring(0,2).toUpperCase();
+
 		const res = await fetch('/login', {
 			method: 'POST',
 			body: JSON.stringify({
+				api,
 				username,
 				password,
-				districtUrl
+				districtName,
+				finalState
 			})
 		})
 		if (res.ok) {
@@ -69,7 +78,8 @@
 <div class="content">
 	<form on:submit|preventDefault={login}>
 		<h2>Login</h2>
-        <Select items={states} />
+        <Select items={states} bind:value={state}/>
+		<input type="text" placeholder="District Name" bind:value={districtName} />
 		<input type="text" placeholder="Username" bind:value={username} />
 		<input type="password" placeholder="Password" bind:value={password} />
 		<div class="error">
