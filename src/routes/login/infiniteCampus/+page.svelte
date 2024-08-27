@@ -1,16 +1,21 @@
 <script>
+    const InfiniteCampus = require('infinite-campus')
+
 	import { goto } from '$app/navigation'
 	import { parseData } from '$lib/js/parseData.js'
 	import { session } from '$lib/stores/session.js'
 	import { oldAssignments } from '$lib/stores/oldAssignments.js'
 	import Spinner from '$lib/components/Spinner.svelte'
+    import Select from 'svelte-select';
 
-	let districtUrl = 'https://wa-bsd405-psv.edupoint.com/'
+	let districtUrl
 	let username
 	let password
 	let error
 	let loading = false
 
+    let states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+    
 	async function login() {
 		if (!districtUrl) {
 			error = 'Please enter a district URL.'
@@ -65,6 +70,8 @@
 <div class="content">
 	<form on:submit|preventDefault={login}>
 		<h2>Login</h2>
+        <select>
+        </select>
 		<input type="text" placeholder="District URL" bind:value={districtUrl} />
 		<input type="text" placeholder="Username" bind:value={username} />
 		<input type="password" placeholder="Password" bind:value={password} />
@@ -74,7 +81,7 @@
 			{:else}
 				Your login info will not be saved anywhere except your browser.<br />
 				You can see all the code on the
-				<a rel="external" href="https://github.com/refact0r/studentvue">github</a>.
+				<a rel="external" href="https://github.com/AndrewCoon/gradenight-IC">github</a>.
 			{/if}
 		</div>
 		<button type="submit">
