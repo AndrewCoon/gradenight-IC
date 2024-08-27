@@ -1,18 +1,23 @@
-import {InfiniteCampus} from 'infinite-campus';
+import InfiniteCampus from 'infinite-campus';
 
-function ic_login(district, state, user, pass){
+export function ic_login(district, state, user, pass){
     console.log(district)
     console.log(state)
     console.log(user)
 
-    return new ICClient(InfiniteCampus(district, state, user, pass));
+    let ic = new InfiniteCampus(district, state, user, pass)
+
+    ic.on('ready', () => {
+        console.log("IC Logged in");
+        return new ICClient(ic);
+    })
+
+   
 }
 
-class ICClient{
+export class ICClient{
     constructor(ic) {
-        ic.on('ready', () => {
-            console.log("IC Logged in");
-        })
+        
         this.ic = ic;
     }
 

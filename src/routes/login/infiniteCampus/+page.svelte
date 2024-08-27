@@ -9,8 +9,8 @@
 
 
 	let districtName
-	let username
-	let password
+	let username 
+	let password 
 	let error
 	let state
 	let loading = false
@@ -80,7 +80,7 @@
 	<form on:submit|preventDefault={login}>
 		<h2>Login</h2>
         <Select items={states} bind:value={state}/>
-		<input type="text" placeholder="District Name" bind:value={districtName} />
+		<input type="text" placeholder="District Name" bind:value={districtName}>
 		<input type="text" placeholder="Username" bind:value={username} />
 		<input type="password" placeholder="Password" bind:value={password} />
 		<div class="error">

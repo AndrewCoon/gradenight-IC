@@ -1,7 +1,7 @@
 import { login } from 'studentvue.js'
 import cookie from 'cookie'
 
-import {ic_login} from './ic.js'
+import {ic_login} from './ic.js/'
 
 export async function POST({ request }) {
 	console.log('post login')
@@ -25,7 +25,7 @@ export async function POST({ request }) {
 		})
 	}
 
-	const currentPeriod =
+	/*const currentPeriod =
 		result[1].ReportingPeriods.ReportPeriod.length -
 		1 -
 		result[1].ReportingPeriods.ReportPeriod.slice()
@@ -58,5 +58,7 @@ export async function POST({ request }) {
 				)
 			}
 		}
-	)
+	)*/
 }
+
+
