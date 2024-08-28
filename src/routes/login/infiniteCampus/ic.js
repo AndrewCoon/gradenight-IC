@@ -1,19 +1,23 @@
 import InfiniteCampus from 'infinite-campus';
 
-export function ic_login(district, state, user, pass){
-    console.log(district)
-    console.log(state)
-    console.log(user)
+export function ic_login(district, state, user, pass) {
 
-    let ic = new InfiniteCampus(district, state, user, pass)
+    return new Promise((resolve, reject) => {
+        let ic = new InfiniteCampus(district, state, user, pass);
 
-    ic.on('ready', () => {
-        console.log("IC Logged in");
-        return new ICClient(ic);
-    })
+        ic.on('ready', () => {
+            console.log("IC Logged in");
+            resolve(new ICClient(ic));
+        });
 
-   
+        ic.on('error', (err) => {
+            reject(err);
+        });
+
+
+    });
 }
+
 
 export class ICClient{
     constructor(ic) {
@@ -22,9 +26,13 @@ export class ICClient{
     }
 
     getMessages() {
-        ic.getNotifications().then((notifications) => {
-            return this._xmlJsonSerialize(notifications);
-        })
+        return new Promise((resolve, reject) => {
+            this.ic.getNotifications(200).then((notifications) => {
+                console.log(JSON.stringify(notifications));
+                resolve(JSON.stringify(notifications));
+            })
+        });
+
         //return this._xmlJsonSerialize(this._makeServiceRequest('GetPXPMessages'));
     }
 

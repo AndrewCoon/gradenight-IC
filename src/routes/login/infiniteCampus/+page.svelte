@@ -8,11 +8,11 @@
     import Select from 'svelte-select';
 
 
-	let districtName
+	let districtName 
 	let username 
 	let password 
 	let error
-	let state
+	let state 
 	let loading = false
 
 	let api = "IC";

@@ -10,14 +10,19 @@ export async function POST({ request }) {
 	let result
 
 	try {
-		let client = await ic_login(body.districtName, body.finalState, body.username, body.password)
-		result = await Promise.all([
-			client.getMessages().then((value) => console.log(JSON.parse(value)))
-		])
+		let client = ic_login(body.districtName, body.finalState, body.username, body.password).then((cl) => {
+			console.log('woaw')
+			cl.getMessages().then((value) => console.log(JSON.parse(value)))
+		})
+		console.log("hii :3");
+		/*result = await Promise.all([
+			
+		])*/
 
-		if (!result[0]) {
-			throw new Error('No data returned')
-		}
+
+		return new Response(null, {
+			status: 200
+		})
 	} catch (error) {
 		console.log(error)
 		return new Response(null, {
